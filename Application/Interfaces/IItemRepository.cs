@@ -9,11 +9,11 @@ namespace Infrastructure.Data.Repositories
 {
     public interface IItemRepository
     {
-        Task<Item?> GetByIdAsync(int id);
         Task<IEnumerable<Item>> GetAllAsync();
-        Task AddAsync(Item item);
-        void Update(Item item);
-        void Delete(Item item);
-        Task SaveChangesAsync();
+        Task<Item?> GetByIdAsync(int id);
+        Task<Item?> GetWithProductAsync(int id);
+        Task<Item> AddAsync(Item item);
+        Task UpdateAsync(Item item);
+        Task DeleteAsync(Item item);
     }
 }

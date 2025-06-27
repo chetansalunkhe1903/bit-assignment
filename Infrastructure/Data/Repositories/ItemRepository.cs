@@ -17,34 +17,47 @@ namespace Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public async Task<Item?> GetByIdAsync(int id)
-        {
-            return await _context.Items.FindAsync(id);
-        }
-
         public async Task<IEnumerable<Item>> GetAllAsync()
         {
-            return await _context.Items.AsNoTracking().ToListAsync();
+            return await _context.Items
+            .Include(i => i.Product)
+            .AsNoTracking()
+            .ToListAsync();
         }
 
-        public async Task AddAsync(Item item)
+        public async Task<Item?> GetByIdAsync(int id)
         {
-            await _context.Items.AddAsync(item);
+            return await _context.Items
+            .Include(i => i.Product)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public void Update(Item item)
+        public async Task<Item> AddAsync(Item item)
+        {
+            _context.Items.Add(item);
+            await _context.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task UpdateAsync(Item item)
         {
             _context.Items.Update(item);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Item item)
+        public async Task DeleteAsync(Item item)
         {
             _context.Items.Remove(item);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task SaveChangesAsync()
+        public async Task<Item?> GetWithProductAsync(int id)
         {
-            await _context.SaveChangesAsync();
+            return await _context.Items
+            .Include(i => i.Product)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(i => i.Id == id);
         }
     }
 }

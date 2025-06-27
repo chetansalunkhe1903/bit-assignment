@@ -1,26 +1,23 @@
 ﻿using Application.DTOs;
-using Domain.Entities;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Domain.Entities;
 
-namespace Application.Mapping
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            // Domain -> DTO
-            CreateMap<Product, ProductDto>();
+        // Product mappings
+        CreateMap<Product, ProductDto>();
+        CreateMap<CreateProductDto, Product>();
+        CreateMap<UpdateProductDto, Product>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            // DTO -> Domain
-            CreateMap<CreateProductDto, Product>();
-            CreateMap<UpdateProductDto, Product>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        }
+        // Item mappings
+        CreateMap<Item, ItemDto>()
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName));
+
+        CreateMap<CreateItemDto, Item>();
+        CreateMap<UpdateItemDto, Item>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
 }

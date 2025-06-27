@@ -19,13 +19,17 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _context.Products.AsNoTracking().ToListAsync();
+            return await _context.Products
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<Product?> GetByIdAsync(int id)
         {
-            return await _context.Products.Include(p => p.Items)
-                                          .FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products
+               .Include(p => p.Items)
+               .AsNoTracking()
+               .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Product product)

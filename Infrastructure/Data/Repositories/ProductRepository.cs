@@ -53,5 +53,9 @@ namespace Infrastructure.Data.Repositories
         {
             return await _context.Items.Where(i => i.ProductId == productId).ToListAsync();
         }
+        public async Task<bool> ExistsAsync(int productId)
+        {
+            return await _context.Products.AnyAsync(p => p.Id == productId);
+        }
     }
 }

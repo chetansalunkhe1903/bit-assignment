@@ -14,12 +14,14 @@ namespace Application.Services
     public class ItemService : IItemService
     {
         private readonly IItemRepository _itemRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
-        public ItemService(IItemRepository itemRepository, IMapper mapper)
+        public ItemService(IItemRepository itemRepository, IMapper mapper, IProductRepository productRepo)
         {
             _itemRepository = itemRepository;
             _mapper = mapper;
+            _productRepository = productRepo;
         }
 
         public async Task<IEnumerable<ItemDto>> GetAllAsync()
@@ -36,6 +38,11 @@ namespace Application.Services
 
         public async Task<ItemDto> CreateAsync(CreateItemDto dto)
         {
+            var productExists = await _productRepository.ExistsAsync(dto.ProductId);
+            if (!productExists)
+            {
+                throw new ArgumentException($"Product with ID {dto.ProductId} does not exist.");
+            }
             var item = _mapper.Map<Item>(dto);
             item = await _itemRepository.AddAsync(item);
 

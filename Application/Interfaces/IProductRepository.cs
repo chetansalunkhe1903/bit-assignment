@@ -11,6 +11,7 @@ namespace Infrastructure.Data.Repositories
     {
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product?> GetByIdAsync(int id);
+        Task<bool> ExistsAsync(int productId);
         Task AddAsync(Product product);
         Task UpdateAsync(Product product);
         Task DeleteAsync(Product product);

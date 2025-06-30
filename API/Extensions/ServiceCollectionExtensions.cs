@@ -42,11 +42,29 @@ namespace API.Extensions
 
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
         {
-            services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
+            var jwtSettings = config.GetSection("JwtSettings");
+            var secretKey = jwtSettings["Key"];
+            var issuer = jwtSettings["Issuer"];
+            var audience = jwtSettings["Audience"];
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+
+            services.Configure<JwtSettings>(jwtSettings);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = issuer,
+                        ValidAudience = audience,
+                        IssuerSigningKey = key
+                    };
+
                     options.Events = new JwtBearerEvents
                     {
                         OnChallenge = context =>

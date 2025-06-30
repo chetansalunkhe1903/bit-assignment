@@ -31,7 +31,14 @@ namespace Application.Services
         public async Task<ProductDto?> GetByIdAsync(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
-            return product is null ? null : _mapper.Map<ProductDto>(product);
+            if (product is null) return null;
+            var productDto = _mapper.Map<ProductDto>(product);
+
+            // Load related items
+            var relatedItems = await _productRepository.GetRelatedItemsAsync(product.Id);
+            productDto.RelatedItems = _mapper.Map<List<RelatedItemDto>>(relatedItems);
+
+            return productDto;
         }
 
         public async Task<ProductDto> CreateAsync(CreateProductDto createDto)

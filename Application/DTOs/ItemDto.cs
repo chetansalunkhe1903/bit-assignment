@@ -9,9 +9,9 @@ namespace Application.DTOs
     public class ItemDto
     {
         public int Id { get; set; }
-        public string ItemName { get; set; } = null!;
+        public string ItemName { get; set; } = string.Empty;
         public int ProductId { get; set; }
-        public string ProductName { get; set; } = null!;
+        public string ProductName { get; set; } = string.Empty;
         public int Quantity { get; set; }
     }
 }

@@ -49,5 +49,9 @@ namespace Infrastructure.Data.Repositories
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Item>> GetRelatedItemsAsync(int productId)
+        {
+            return await _context.Items.Where(i => i.ProductId == productId).ToListAsync();
+        }
     }
 }

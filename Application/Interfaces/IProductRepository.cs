@@ -14,5 +14,6 @@ namespace Infrastructure.Data.Repositories
         Task AddAsync(Product product);
         Task UpdateAsync(Product product);
         Task DeleteAsync(Product product);
+        Task<List<Item>>GetRelatedItemsAsync(int productId);
     }
 }

@@ -11,6 +11,7 @@ public class MappingProfile : Profile
         CreateMap<CreateProductDto, Product>();
         CreateMap<UpdateProductDto, Product>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+        CreateMap<Item, RelatedItemDto>();
 
         // Item mappings
         CreateMap<Item, ItemDto>()
